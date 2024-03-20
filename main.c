@@ -84,11 +84,11 @@ int add(struct_with_field_tranzactions* struct_obj) {
 	return 0;
 }
 void afisare_tranzactii(struct_with_field_tranzactions* struct_obj) {
-	struct_with_field_tranzactions copie = lista_de_tranzactii(struct_obj);
-	for (int i = 1; i <= copie.nr_of_tranzactions; ++i) {
-		printf("tranzactia: %d\nid: %d\nday: %d\nsum: %d\n", i, copie.arr_of_tranzactions[i].id_tranzaction, copie.arr_of_tranzactions[i].day, copie.arr_of_tranzactions[i].sum);
-		puts(copie.arr_of_tranzactions[i].type);
-		puts(copie.arr_of_tranzactions[i].description);
+	struct_with_field_tranzactions *copie = lista_de_tranzactii(struct_obj);
+	for (int i = 1; i <= copie -> nr_of_tranzactions; ++i) {
+		printf("tranzactia: %d\nid: %d\nday: %d\nsum: %d\n", i, copie -> arr_of_tranzactions[i].id_tranzaction, copie -> arr_of_tranzactions[i].day, copie -> arr_of_tranzactions[i].sum);
+		puts(*copie -> arr_of_tranzactions[i].type);
+		puts(*copie -> arr_of_tranzactions[i].description);
 		printf("\n\n");
 	}
 }
@@ -179,8 +179,9 @@ int filter(struct_with_field_tranzactions* struct_obj){
 		}
 		getchar();
 	}
-	struct_with_field_tranzactions filtred_tranzactions = filters_on_tranzactions(struct_obj, type_filter, suma, (char)toupper(mod_filter_2));
-	afisare_tranzactii(&filtred_tranzactions);
+	struct_with_field_tranzactions *filtred_tranzactions = filters_on_tranzactions(struct_obj, type_filter, suma, (char)toupper(mod_filter_2));
+	afisare_tranzactii(filtred_tranzactions);
+	destroy_struct_with_field_tranzactions(filtred_tranzactions);
 	return 0;
 }
 
@@ -199,12 +200,13 @@ int sorting(struct_with_field_tranzactions* struct_obj) {
 	if (!(strcmp(dupa_ce, "suma\n") == 0 || strcmp(dupa_ce, "zi\n") == 0))
 		printf("<<  Mod sortare incorect  >>");
 
-	struct_with_field_tranzactions sorted_tranzactions = sorting_based_of_criteria(struct_obj, mod_sortare, dupa_ce);
-	afisare_tranzactii(&sorted_tranzactions);
+	struct_with_field_tranzactions *sorted_tranzactions = sorting_based_of_criteria(struct_obj, mod_sortare, dupa_ce);
+	afisare_tranzactii(sorted_tranzactions);
+	destroy_struct_with_field_tranzactions(sorted_tranzactions);
 	return 0;
 }
 void run() {
-	struct_with_field_tranzactions struct_obj = create_list_of_tranzactions();
+	struct_with_field_tranzactions *struct_obj = create_list_of_tranzactions();
 	int var_for_continue = 0;
 	while (var_for_continue == 0) {
 		menu();
@@ -243,6 +245,7 @@ void run() {
 			break;
 		}
 	}
+	destroy_struct_with_field_tranzactions(struct_obj);
 	return 0;
 }
 int main(int argc, char** argv) {
