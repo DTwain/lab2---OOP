@@ -90,8 +90,11 @@ void test_filters_on_tranzactions_serv() {
 	struct_with_field_tranzactions *copie2 = filters_on_tranzactions(struct_obj, "intrare\n", 400, 'H');
 	struct_with_field_tranzactions *copie3 = filters_on_tranzactions(struct_obj, "iesire\n", 400, 'L');
 	struct_with_field_tranzactions *copie4 = filters_on_tranzactions(struct_obj, "intrrrare\n", 400, 'H');
-	
+	struct_with_field_tranzactions *copie5 = filters_on_tranzactions(struct_obj, "\0", 301, 'L');
+	struct_with_field_tranzactions* copie6 = filters_on_tranzactions(struct_obj, "\0", 301, 'H');
+	struct_with_field_tranzactions* copie7 = filters_on_tranzactions(struct_obj, "iesire\n", -1, 'L');
 
+	
 	assert(copie2 -> nr_of_tranzactions == 3);
 	assert(copie2 -> arr_of_tranzactions[0].day == 5);
 	assert(copie2 -> arr_of_tranzactions[0].sum == 500);
@@ -111,9 +114,27 @@ void test_filters_on_tranzactions_serv() {
 
 	assert(copie4 -> nr_of_tranzactions == 0);
 
+	assert(copie5->nr_of_tranzactions == 2);
+	assert(copie5->arr_of_tranzactions[0].day == 12);
+	assert(copie5->arr_of_tranzactions[0].sum == 40);
+	assert(strcmp(copie5->arr_of_tranzactions[0].type, "iesire\n") == 0);
+	assert(strcmp(copie5->arr_of_tranzactions[0].description, "cumparaturi\n") == 0);
+
+	assert(copie5->arr_of_tranzactions[1].day == 8);
+	assert(copie5->arr_of_tranzactions[1].sum == 300);
+	assert(strcmp(copie5->arr_of_tranzactions[1].type, "iesire\n") == 0);
+	assert(strcmp(copie5->arr_of_tranzactions[1].description, "plata ceva\n") == 0);
+
+	assert(copie6->nr_of_tranzactions == 3);
+	
+	assert(copie7->nr_of_tranzactions == 2);
+
 	destroy_struct_with_field_tranzactions(copie2);
 	destroy_struct_with_field_tranzactions(copie3);
 	destroy_struct_with_field_tranzactions(copie4);
+	destroy_struct_with_field_tranzactions(copie5);
+	destroy_struct_with_field_tranzactions(copie6);
+	destroy_struct_with_field_tranzactions(copie7);
 	destroy_struct_with_field_tranzactions(struct_obj);
 }
 

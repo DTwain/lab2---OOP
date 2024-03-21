@@ -23,6 +23,7 @@ void test_all() {
 	test_delete_tranzaction_repo();
 	test_modify_tranzaction_repo();
 	test_get_next_tranzaction_id();
+	test_resize();
 	test_add_tranzaction_serv();
 	test_delete_tranzaction_serv();
 	test_modify_tranzaction_serv();

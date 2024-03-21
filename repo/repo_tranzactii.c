@@ -22,39 +22,32 @@ struct_with_field_tranzactions *create_list_of_tranzactions() {
 /*
 Redimensionare array dinamic 
 */
-struct_with_field_tranzactions *resize(struct_with_field_tranzactions* struct_obj) {
-	struct_with_field_tranzactions* new_struct_obj = (struct_with_field_tranzactions*)malloc(sizeof(struct_with_field_tranzactions));
-	if (new_struct_obj == NULL)
-		exit(EXIT_FAILURE);
-
-	new_struct_obj -> capacity = struct_obj -> capacity * 2;
-	new_struct_obj -> nr_of_tranzactions = struct_obj -> nr_of_tranzactions;
-	new_struct_obj -> nr_of_tranzactions_added_from_start = struct_obj -> nr_of_tranzactions_added_from_start;
-
-	size_t arr_capacity = new_struct_obj -> capacity;
-	new_struct_obj -> arr_of_tranzactions = (tranzaction*)malloc(arr_capacity * sizeof(tranzaction));
-	if (new_struct_obj -> arr_of_tranzactions == NULL)
+void resize(struct_with_field_tranzactions* struct_obj) {
+	struct_obj -> capacity *= 2;
+	
+	size_t arr_capacity = struct_obj-> capacity;
+	tranzaction* new_arr_of_tranzactions = (tranzaction*)malloc(arr_capacity * sizeof(tranzaction));
+	if (new_arr_of_tranzactions == NULL)
 		exit(EXIT_FAILURE);
 
 	for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i) {
-		new_struct_obj->arr_of_tranzactions[i].day = struct_obj->arr_of_tranzactions[i].day;
-		new_struct_obj->arr_of_tranzactions[i].id_tranzaction = struct_obj->arr_of_tranzactions[i].id_tranzaction;
-		new_struct_obj->arr_of_tranzactions[i].sum = struct_obj->arr_of_tranzactions[i].sum;
+		new_arr_of_tranzactions[i].day = struct_obj->arr_of_tranzactions[i].day;
+		new_arr_of_tranzactions[i].id_tranzaction = struct_obj->arr_of_tranzactions[i].id_tranzaction;
+		new_arr_of_tranzactions[i].sum = struct_obj->arr_of_tranzactions[i].sum;
 
 		size_t lengh_type = strlen(struct_obj->arr_of_tranzactions[i].type);
-		new_struct_obj->arr_of_tranzactions[i].type = (char*)malloc(lengh_type + 1);
-		if (new_struct_obj->arr_of_tranzactions[i].type == NULL)
+		new_arr_of_tranzactions[i].type = (char*)malloc(lengh_type + 1);
+		if (new_arr_of_tranzactions[i].type == NULL)
 			exit(EXIT_FAILURE);
-		strcpy_s(new_struct_obj->arr_of_tranzactions[i].type, lengh_type + 1, struct_obj->arr_of_tranzactions[i].type);
+		strcpy_s(new_arr_of_tranzactions[i].type, lengh_type + 1, struct_obj->arr_of_tranzactions[i].type);
 
 		size_t lengh_description = strlen(struct_obj->arr_of_tranzactions[i].description);
-		new_struct_obj->arr_of_tranzactions[i].description = (char*)malloc(lengh_description + 1);
-		if (new_struct_obj->arr_of_tranzactions[i].description == NULL)
+		new_arr_of_tranzactions[i].description = (char*)malloc(lengh_description + 1);
+		if (new_arr_of_tranzactions[i].description == NULL)
 			exit(EXIT_FAILURE);
-		strcpy_s(new_struct_obj->arr_of_tranzactions[i].description, lengh_description + 1, struct_obj->arr_of_tranzactions[i].description);
+		strcpy_s(new_arr_of_tranzactions[i].description, lengh_description + 1, struct_obj->arr_of_tranzactions[i].description);
 	}
-	destroy_struct_with_field_tranzactions(struct_obj);
-	return new_struct_obj;
+	struct_obj -> arr_of_tranzactions = new_arr_of_tranzactions;
 }
 /*
 Readucerea la 0 a numarului de tranzactii, "stergerea lor"
@@ -112,7 +105,7 @@ return 0 : Adaugarea s - a realizat cu succes
 */
 int add_tranzaction_repo(struct_with_field_tranzactions *struct_obj, tranzaction *curr_tranzaction) {
 	if (struct_obj -> capacity == struct_obj -> nr_of_tranzactions)
-		struct_obj = resize(struct_obj);
+		resize(struct_obj);
 
 	struct_obj -> arr_of_tranzactions[struct_obj -> nr_of_tranzactions].day = curr_tranzaction -> day;
 	struct_obj -> arr_of_tranzactions[struct_obj -> nr_of_tranzactions].id_tranzaction = struct_obj -> nr_of_tranzactions_added_from_start;
