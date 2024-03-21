@@ -12,13 +12,13 @@ tranzaction *create_tranzaction(int id, int day, int sum, char *type, char *desc
 	if (tranzaction_to_be_added == NULL)
 		exit(EXIT_FAILURE);
 
-	tranzaction_to_be_added -> type = (char*)malloc(strlen(type) * sizeof(char));
-	if (tranzaction_to_be_added->type == NULL)
+	tranzaction_to_be_added -> type = (char*)malloc(strlen(type) + 1);
+	if (tranzaction_to_be_added -> type == NULL)
 		exit(EXIT_FAILURE);
 
 	strcpy(tranzaction_to_be_added -> type, type);
 
-	tranzaction_to_be_added -> description = (char*)malloc(strlen(description) * sizeof(char));
+	tranzaction_to_be_added -> description = (char*)malloc(strlen(description) + 1);
 	if (tranzaction_to_be_added -> description == NULL)
 		exit(EXIT_FAILURE);
 
