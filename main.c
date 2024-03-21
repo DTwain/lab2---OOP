@@ -41,7 +41,7 @@ void menu() {
 int read_option() {
 	int option = 0;
 	printf("Alegeti optiunea: ");
-	if (scanf("%d", &option) == 1)
+	if (scanf_s("%d", &option) == 1)
 		return option;
 	return -1;
 }
@@ -56,40 +56,46 @@ void verify_option(int option) {
 }
 void read_data (int *day, int *sum, char type[], char description[]) {
 	printf("day = ");
-	if (scanf("%d", day) != 1) {
+	if (scanf_s("%d", day) != 1) {
 		fprintf(stderr, "Citirea zilei a picat\n\n");
 		exit(EXIT_FAILURE);
 	}
-	getchar();
+	if (getchar() == EOF)
+		exit(EXIT_FAILURE);
 
 	printf("suma = ");
-	if (scanf("%d", sum) != 1) {
+	if (scanf_s("%d", sum) != 1) {
 		fprintf(stderr, "Citirea sumei a picat\n\n");
 		exit(EXIT_FAILURE);
 	}
-	getchar();
+	if (getchar() == EOF)
+		exit(EXIT_FAILURE);
 
 	printf("tip: ");
 	fgets(type, 60, stdin);
 
 	printf("description: ");
 	fgets(description, 300, stdin);
+
 }
 int add(struct_with_field_tranzactions* struct_obj) {
 	int day = -1;
 	int sum = -1;
-	char type[61];
-	char description[301];
+	char type[60];
+	char description[300];
 	read_data(&day, &sum, type, description);
-	char* type_dinamic = (char*)malloc(strlen(type) + 1);
+
+	size_t lengh_type = strlen(type);
+	char* type_dinamic = (char*)malloc(lengh_type + 1);
 	if (type_dinamic == NULL)
 		exit(EXIT_FAILURE);
-	strcpy(type_dinamic, type);
+	strcpy_s(type_dinamic, lengh_type + 1, type);
 
-	char* description_dinamic = (char*)malloc(strlen(description) + 1);
+	size_t lengh_description = strlen(description);
+	char* description_dinamic = (char*)malloc(lengh_description + 1);
 	if (description_dinamic == NULL)
 		exit(EXIT_FAILURE);
-	strcpy(description_dinamic, description);
+	strcpy_s(description_dinamic, lengh_description + 1, description);
 
 	if (add_tranzaction(struct_obj, day, sum, type, description) != 0) {
 		free(type_dinamic);
@@ -101,11 +107,10 @@ int add(struct_with_field_tranzactions* struct_obj) {
 	return 0;
 }
 void afisare_tranzactii(struct_with_field_tranzactions* struct_obj) {
-	struct_with_field_tranzactions *copie = lista_de_tranzactii(struct_obj);
-	for (int i = 0; i < copie -> nr_of_tranzactions; ++i) {
-		printf("tranzactia: %d\nid: %d\nday: %d\nsum: %d\n", i, copie -> arr_of_tranzactions[i].id_tranzaction, copie -> arr_of_tranzactions[i].day, copie -> arr_of_tranzactions[i].sum);
-		puts(copie -> arr_of_tranzactions[i].type);
-		puts(copie -> arr_of_tranzactions[i].description);
+	for (int i = 0; i < struct_obj-> nr_of_tranzactions; ++i) {
+		printf("tranzactia: %d\nid: %d\nday: %d\nsum: %d\n", i, struct_obj-> arr_of_tranzactions[i].id_tranzaction, struct_obj-> arr_of_tranzactions[i].day, struct_obj-> arr_of_tranzactions[i].sum);
+		puts(struct_obj-> arr_of_tranzactions[i].type);
+		puts(struct_obj-> arr_of_tranzactions[i].description);
 		printf("\n\n");
 	}
 }
@@ -119,22 +124,25 @@ int modify(struct_with_field_tranzactions* struct_obj) {
 	char description[300];
 
 	printf("Alege un id pentru a modifica tranzactia respectiva : ");
-	if (scanf("%d", &id) != 1) {
+	if (scanf_s("%d", &id) != 1) {
 		fprintf(stderr, "Citirea id-ului a picat\n\n");
 		exit(EXIT_FAILURE);
 	}
-	getchar();
+	if (getchar() == EOF)
+		exit(EXIT_FAILURE);
 	read_data(&day, &sum, type, description);
 
-	char* type_dinamic = (char*)malloc(strlen(type) + 1);
+	size_t lengh_type = strlen(type);
+	char* type_dinamic = (char*)malloc(lengh_type + 1);
 	if (type_dinamic == NULL)
 		exit(EXIT_FAILURE);
-	strcpy(type_dinamic, type);
+	strcpy_s(type_dinamic, lengh_type + 1, type);
 
-	char* description_dinamic = (char*)malloc(strlen(description) + 1);
+	size_t lengh_description = strlen(description);
+	char* description_dinamic = (char*)malloc(lengh_description + 1);
 	if (description_dinamic == NULL)
 		exit(EXIT_FAILURE);
-	strcpy(description_dinamic, description);
+	strcpy_s(description_dinamic, lengh_description + 1, description);
 
 	if (modify_tranzaction(struct_obj, id, day, sum, type_dinamic, description_dinamic) != 0) {
 		free(type_dinamic);
@@ -146,18 +154,18 @@ int modify(struct_with_field_tranzactions* struct_obj) {
 	return 0;
 }
 
-int delete(struct_with_field_tranzactions* struct_obj) {
+struct_with_field_tranzactions* delete(struct_with_field_tranzactions* struct_obj) {
 	afisare_tranzactii(struct_obj);
 	int id = -1;
 	printf("Alege un id pentru a sterge tranzactia respectiva : ");
-	if (scanf("%d", &id) != 1) {
+	if (scanf_s("%d", &id) != 1) {
 		fprintf(stderr, "Citirea id-ului a picat\n\n");
 		exit(EXIT_FAILURE);
 	}
-	getchar();
-	if (delete_tranzaction(struct_obj, id) == NULL)
-		return -1;
-	return 0;
+	if (getchar() == EOF)
+		exit(EXIT_FAILURE);
+	struct_with_field_tranzactions* rezultat = delete_tranzaction(struct_obj, id);
+	return rezultat;
 }
 
 int filter(struct_with_field_tranzactions* struct_obj){
@@ -170,58 +178,66 @@ int filter(struct_with_field_tranzactions* struct_obj){
 
 	int optiune_filtru = 0;
 	printf("Optiune: ");
-	if (scanf("%d", &optiune_filtru) != 1) {
+	if (scanf_s("%d", &optiune_filtru) != 1) {
 		fprintf(stderr, "Citirea optiune_filtru-ului a picat\n\n");
 		exit(EXIT_FAILURE);
 	}
-	getchar();
+	if (getchar() == EOF)
+		exit(EXIT_FAILURE);
 
 	char type_filter[50];
 	type_filter[0] = '\0';
-	char mod_filter_2 = "l";
+	char mod_filter_2 = 'L';
 	int suma = -1;
 
 	if (optiune_filtru == 1) {
 		printf("Type filter: ");
-		fgets(type_filter, 9, stdin);
+		fgets(type_filter, 50, stdin);
 	}
 	else if (optiune_filtru == 2) {
 		printf("Da-ti suma: ");
-		if (scanf("%d", &suma) != 1) {
+		if (scanf_s("%d", &suma) != 1) {
 			fprintf(stderr, "Citirea sumei-ului a picat\n\n");
 			exit(EXIT_FAILURE);
 		}
-		getchar();
+		if (getchar() == EOF)
+			exit(EXIT_FAILURE);
 
 		printf("Afisarea tranzactiilor cu suma mai ... decat %d : < H - mai mare / L - mai mica >", suma);
-		if (scanf("%c", &mod_filter_2) != 1) {
+		if (scanf_s("%c", &mod_filter_2, 1) != 1) {
 			fprintf(stderr, "Citirea mod_filter_2-ului a picat\n\n");
 			exit(EXIT_FAILURE);
 		}
-		getchar();
+		if (getchar() == EOF)
+			exit(EXIT_FAILURE);
 	}
 	else if (optiune_filtru == 12) {
-		fgets(type_filter, 9, stdin);
+		printf("Type filter: ");
+		fgets(type_filter, 50, stdin);
 		printf("Da-ti suma: ");
-		if (scanf("%d", &suma) != 1) {
+		if (scanf_s("%d", &suma) != 1) {
 			fprintf(stderr, "Citirea sumei a picat\n\n");
 			exit(EXIT_FAILURE);
 		}
-		getchar();
+		if (getchar() == EOF)
+			exit(EXIT_FAILURE);
 
 		printf("Afisarea tranzactiilor cu suma mai ... decat %d : < H - mai mare / L - mai mica > ", suma);
-		if (scanf("%c", &mod_filter_2) != 1) {
+		if (scanf_s("%c", &mod_filter_2, 1) != 1) {
 			fprintf(stderr, "Citirea mod_filter_2-ului a picat\n\n");
 			exit(EXIT_FAILURE);
 		}
-		getchar();
+		if (getchar() == EOF)
+			exit(EXIT_FAILURE);
 	}
-	char* type_filter_dinamic = (char*)malloc(strlen(type_filter) + 1);
+	size_t lengh_type_filter = strlen(type_filter);
+	char* type_filter_dinamic = (char*)malloc(lengh_type_filter + 1);
 	if (type_filter_dinamic == NULL)
 		exit(EXIT_FAILURE);
-	strcpy(type_filter_dinamic, type_filter);
+	strcpy_s(type_filter_dinamic, lengh_type_filter + 1, type_filter);
 
 	struct_with_field_tranzactions *filtred_tranzactions = filters_on_tranzactions(struct_obj, type_filter_dinamic, suma, (char)toupper(mod_filter_2));
+	
 	afisare_tranzactii(filtred_tranzactions);
 
 	free(type_filter_dinamic);
@@ -233,20 +249,24 @@ int sorting(struct_with_field_tranzactions* struct_obj) {
 	afisare_tranzactii(struct_obj);
 	char mod_sortare = 'C';
 	printf("Alege modul de sortare < C - crescator / D - descrescator > ");
-	if (scanf(" %c", &mod_sortare) != 1) {
+	if (scanf_s(" %c", &mod_sortare, 1) != 1) {
 		fprintf(stderr, "Citirea mod_sortare-ului a picat\n\n");
 		exit(EXIT_FAILURE);
 	}
-	getchar();
+	if (getchar() == EOF)
+		exit(EXIT_FAILURE);
+	
 	printf("Alege dupa ce se realizeaza sortare: < suma , zi > : ");
 	char dupa_ce[50];
-	fgets(dupa_ce, 9, stdin);
+	fgets(dupa_ce, 50, stdin);
 	if (!(strcmp(dupa_ce, "suma\n") == 0 || strcmp(dupa_ce, "zi\n") == 0))
 		printf("<<  Mod sortare incorect  >>");
 
-	char* dupa_ce_dinamic = (char*)malloc(strlen(dupa_ce) + 1);
+	size_t lengh_dupa_ce = strlen(dupa_ce);
+	char* dupa_ce_dinamic = (char*)malloc(lengh_dupa_ce + 1);
 	if (dupa_ce_dinamic == NULL)
 		exit(EXIT_FAILURE);
+	strcpy_s(dupa_ce_dinamic, lengh_dupa_ce + 1, dupa_ce);
 
 	struct_with_field_tranzactions *sorted_tranzactions = sorting_based_of_criteria(struct_obj, mod_sortare, dupa_ce_dinamic);
 	afisare_tranzactii(sorted_tranzactions);
@@ -275,12 +295,16 @@ void run() {
 			else
 				printf("OKKK\n\n");
 			break;
-		case 3:
-			if (delete(struct_obj) != 0)
+		case 3: {
+			struct_with_field_tranzactions* rezultat = delete(struct_obj);
+			if (rezultat == NULL)
 				printf("Ceva a pical la stergere\n\n");
-			else
+			else {
+				struct_obj = rezultat;
 				printf("OKKK\n\n");
+			}
 			break;
+		}
 		case 4:
 			if (filter(struct_obj) != 0)
 				printf("Ceva a pical la filtrare\n\n");
@@ -296,11 +320,10 @@ void run() {
 		}
 	}
 	destroy_struct_with_field_tranzactions(struct_obj);
-	return 0;
 }
-int main(int argc, char** argv) {
-	//test_all();
-	run();
+int main() {
+	test_all();
+	//run();
 	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
 	_CrtDumpMemoryLeaks();
 	return 0;

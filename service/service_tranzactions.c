@@ -61,34 +61,41 @@ struct_with_field_tranzactions *lista_de_tranzactii(struct_with_field_tranzactio
 }
 
 struct_with_field_tranzactions *filters_on_tranzactions(struct_with_field_tranzactions *struct_obj, char *type_filter, int sum_filter, char mod_h_or_l) {
-	struct_with_field_tranzactions *copie = copie_struct_obj(struct_obj);
-	if (strcmp(type_filter, "intrare\n") == 0 || strcmp(type_filter, "iesire\n") == 0)
-		for(int i = 0; i < copie -> nr_of_tranzactions; ++i)
-			if (strcmp(copie -> arr_of_tranzactions[i].type, type_filter) != 0) {
-				for (int j = i; j < copie -> nr_of_tranzactions - 1; ++j)
-					copie -> arr_of_tranzactions[j] = copie -> arr_of_tranzactions[j + 1];
-				copie -> nr_of_tranzactions -= 1;
-				i -= 1;
-			}
-	if (mod_h_or_l == 'H' && sum_filter != -1) {
-		for (int i = 0; i < copie -> nr_of_tranzactions; ++i)
-			if (copie -> arr_of_tranzactions[i].sum <= sum_filter) {
-				for (int j = i; j < copie -> nr_of_tranzactions - 1; ++j)
-					copie -> arr_of_tranzactions[j] = copie -> arr_of_tranzactions[j + 1];
-				copie -> nr_of_tranzactions -= 1;
-				i -= 1;
-			}
+	struct_with_field_tranzactions* filtered_struct_obj = create_list_of_tranzactions();
+	if (sum_filter == -1) {
+		for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
+			if(strcmp(struct_obj->arr_of_tranzactions[i].type, type_filter) == 0)
+				add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
 	}
-	else if (mod_h_or_l == 'L' && sum_filter != -1) {
-		for (int i = 0; i < copie -> nr_of_tranzactions; ++i)
-			if (copie -> arr_of_tranzactions[i].sum >= sum_filter) {
-				for (int j = i; j < copie -> nr_of_tranzactions - 1; ++j)
-					copie -> arr_of_tranzactions[j] = copie -> arr_of_tranzactions[j + 1];
-				copie -> nr_of_tranzactions -= 1;
-				i -= 1;
-			}
+	else if(strlen(type_filter) == 0) {
+		if (mod_h_or_l == 'H' && sum_filter != -1) {
+			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
+				if (struct_obj->arr_of_tranzactions[i].sum >= sum_filter) {
+					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				}
+		}
+		else if (mod_h_or_l == 'L' && sum_filter != -1) {
+			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
+				if (struct_obj->arr_of_tranzactions[i].sum <= sum_filter) {
+					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				}
+		}
 	}
-	return copie;		
+	else {
+		if (mod_h_or_l == 'H' && sum_filter != -1) {
+			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
+				if (struct_obj->arr_of_tranzactions[i].sum >= sum_filter && strcmp(struct_obj->arr_of_tranzactions[i].type, type_filter) == 0) {
+					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				}
+		}
+		else if (mod_h_or_l == 'L' && sum_filter != -1) {
+			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
+				if (struct_obj->arr_of_tranzactions[i].sum <= sum_filter && strcmp(struct_obj->arr_of_tranzactions[i].type, type_filter) == 0) {
+					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				}
+		}
+	}
+	return filtered_struct_obj;
 }
 
 struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tranzactions *struct_obj, char sorting_mode, char *suma_or_zi) {

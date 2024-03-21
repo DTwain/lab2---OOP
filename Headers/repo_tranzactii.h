@@ -9,7 +9,7 @@ typedef struct {
 }struct_with_field_tranzactions;
 
 struct_with_field_tranzactions *create_list_of_tranzactions();
-void resize(struct_with_field_tranzactions* struct_obj);
+struct_with_field_tranzactions* resize(struct_with_field_tranzactions* struct_obj);
 void destroy_struct_with_field_tranzactions(struct_with_field_tranzactions *struct_obj);
 struct_with_field_tranzactions *copie_struct_obj(struct_with_field_tranzactions *struct_obj);
 int add_tranzaction_repo(struct_with_field_tranzactions* struct_obj, tranzaction *curr_tranzaction);
