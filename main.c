@@ -329,4 +329,11 @@ int main() {
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
+/*
+int *a[10];
+int **a;
+
+Tranzaction **arr_of_tranzactions;
+
+*/
 // ana are mere

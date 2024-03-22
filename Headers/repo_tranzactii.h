@@ -2,7 +2,7 @@
 #include "tranzaction.h"
 
 typedef struct {
-	tranzaction *arr_of_tranzactions;
+	tranzaction* arr_of_tranzactions;
 	int capacity;
 	int nr_of_tranzactions;
 	int nr_of_tranzactions_added_from_start;
