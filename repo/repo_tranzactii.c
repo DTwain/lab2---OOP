@@ -46,7 +46,11 @@ void resize(struct_with_field_tranzactions* struct_obj) {
 		if (new_arr_of_tranzactions[i].description == NULL)
 			exit(EXIT_FAILURE);
 		strcpy_s(new_arr_of_tranzactions[i].description, lengh_description + 1, struct_obj->arr_of_tranzactions[i].description);
+
+		free(struct_obj->arr_of_tranzactions[i].type);
+		free(struct_obj->arr_of_tranzactions[i].description);
 	}
+	free(struct_obj -> arr_of_tranzactions);
 	struct_obj -> arr_of_tranzactions = new_arr_of_tranzactions;
 }
 /*

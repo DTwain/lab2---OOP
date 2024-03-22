@@ -178,5 +178,27 @@ void test_resize() {
 
 	assert(struct_obj -> capacity == 40);
 
+	destroy_tranzaction(temp);
+	destroy_tranzaction(temp1);
+	destroy_tranzaction(temp2);
+	destroy_tranzaction(temp3);
+	destroy_tranzaction(temp4);
+	destroy_tranzaction(temp5);
+	destroy_tranzaction(temp6);
+	destroy_tranzaction(temp7);
+	destroy_tranzaction(temp8);
+	destroy_tranzaction(temp9);
+	destroy_tranzaction(temp10);
+	destroy_tranzaction(temp11);
+	destroy_tranzaction(temp12);
+	destroy_tranzaction(temp13);
+	destroy_tranzaction(temp14);
+	destroy_tranzaction(temp15);
+	destroy_tranzaction(temp16);
+	destroy_tranzaction(temp17);
+	destroy_tranzaction(temp18);
+	destroy_tranzaction(temp19);
+	destroy_tranzaction(temp20);
+	destroy_struct_with_field_tranzactions(struct_obj);
 }
 
