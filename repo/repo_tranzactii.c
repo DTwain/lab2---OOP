@@ -23,6 +23,8 @@ struct_with_field_tranzactions *create_list_of_tranzactions() {
 Redimensionare array dinamic 
 */
 void resize(struct_with_field_tranzactions* struct_obj) {
+	if (struct_obj == NULL)
+		return;
 	struct_obj -> capacity *= 2;
 	
 	size_t arr_capacity = struct_obj-> capacity;
@@ -236,6 +238,10 @@ int get_next_tranzaction_id(struct_with_field_tranzactions *struct_obj) {
 	return struct_obj -> nr_of_tranzactions_added_from_start;
 }
 
-
+int comparare(tranzaction* tranzaction1, tranzaction* tranzaction2, char dupa_ce) {
+	if(dupa_ce == 's')
+		return tranzaction1 -> sum - tranzaction2 -> sum;
+	return tranzaction1 -> day - tranzaction2 -> day;
+}
 
 

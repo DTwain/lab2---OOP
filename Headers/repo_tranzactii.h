@@ -17,3 +17,5 @@ struct_with_field_tranzactions* delete_tranzaction_repo(struct_with_field_tranza
 int modify_tranzaction_repo(struct_with_field_tranzactions* struct_obj, tranzaction *modified_tranzaction);
 int get_next_tranzaction_id(struct_with_field_tranzactions *struct_obj);
 void test_resize();
+typedef int(*compare_function)(tranzaction*, tranzaction*, char dupa_ce);
+int comparare(tranzaction* tranzaction1, tranzaction* tranzaction2, char dupa_ce);

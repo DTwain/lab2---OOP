@@ -269,7 +269,7 @@ int sorting(struct_with_field_tranzactions* struct_obj) {
 		exit(EXIT_FAILURE);
 	strcpy_s(dupa_ce_dinamic, lengh_dupa_ce + 1, dupa_ce);
 
-	struct_with_field_tranzactions *sorted_tranzactions = sorting_based_of_criteria(struct_obj, mod_sortare, dupa_ce_dinamic);
+	struct_with_field_tranzactions *sorted_tranzactions = sorting_based_of_criteria(struct_obj, mod_sortare, dupa_ce_dinamic, comparare);
 	afisare_tranzactii(sorted_tranzactions);
 
 	free(dupa_ce_dinamic);

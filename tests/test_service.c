@@ -147,10 +147,10 @@ void test_sorting_based_of_criteria() {
 	assert(add_tranzaction(struct_obj, 7, 900, "intrare\n", "chirie\n") == 0);
 	assert(add_tranzaction(struct_obj, 22, 30, "iesire\n", "hugo\n") == 0);
 
-	struct_with_field_tranzactions *rezultat = sorting_based_of_criteria(struct_obj, 'C', "suma\n");
-	struct_with_field_tranzactions *rezultat2 = sorting_based_of_criteria(struct_obj, 'C', "zi\n");
-	struct_with_field_tranzactions *rezultat3 = sorting_based_of_criteria(struct_obj, 'D', "suma\n");
-	struct_with_field_tranzactions *rezultat4 = sorting_based_of_criteria(struct_obj, 'D', "zi\n");
+	struct_with_field_tranzactions *rezultat = sorting_based_of_criteria(struct_obj, 'C', "suma\n", comparare);
+	struct_with_field_tranzactions *rezultat2 = sorting_based_of_criteria(struct_obj, 'C', "zi\n", comparare);
+	struct_with_field_tranzactions *rezultat3 = sorting_based_of_criteria(struct_obj, 'D', "suma\n", comparare);
+	struct_with_field_tranzactions *rezultat4 = sorting_based_of_criteria(struct_obj, 'D', "zi\n", comparare);
 	
 	assert(rezultat -> arr_of_tranzactions[0].id_tranzaction == 4);
 	assert(rezultat -> arr_of_tranzactions[1].id_tranzaction == 1);

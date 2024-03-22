@@ -97,21 +97,21 @@ struct_with_field_tranzactions *filters_on_tranzactions(struct_with_field_tranza
 	}
 	return filtered_struct_obj;
 }
-
-struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tranzactions *struct_obj, char sorting_mode, char *suma_or_zi) {
+struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tranzactions *struct_obj, char sorting_mode, char *suma_or_zi, compare_function cmp) {
 	struct_with_field_tranzactions *copie = copie_struct_obj(struct_obj);
+
 	if (sorting_mode == 'C') {
 		for (int i = 0; i < copie -> nr_of_tranzactions - 1; ++i)
 			for (int j = i + 1; j < copie -> nr_of_tranzactions; ++j)
 				if (strcmp(suma_or_zi, "suma\n") == 0) {
-					if (copie -> arr_of_tranzactions[i].sum > copie -> arr_of_tranzactions[j].sum) {
+					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 's') > 0) {
 						tranzaction aux = copie -> arr_of_tranzactions[i];
 						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
 						copie -> arr_of_tranzactions[j] = aux;
 					}
 				}
 				else if (strcmp(suma_or_zi, "zi\n") == 0) {
-					if (copie -> arr_of_tranzactions[i].day > copie -> arr_of_tranzactions[j].day) {
+					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 'z') > 0) {
 						tranzaction aux = copie -> arr_of_tranzactions[i];
 						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
 						copie -> arr_of_tranzactions[j] = aux;
@@ -122,14 +122,14 @@ struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tran
 		for (int i = 0; i < copie -> nr_of_tranzactions - 1; ++i)
 			for (int j = i + 1; j < copie -> nr_of_tranzactions; ++j)
 				if (strcmp(suma_or_zi, "suma\n") == 0) {
-					if (copie -> arr_of_tranzactions[i].sum < copie -> arr_of_tranzactions[j].sum) {
+					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 's') < 0) {
 						tranzaction aux = copie -> arr_of_tranzactions[i];
 						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
 						copie -> arr_of_tranzactions[j] = aux;
 					}
 				}
 				else if (strcmp(suma_or_zi, "zi\n") == 0) {
-					if (copie -> arr_of_tranzactions[i].day < copie -> arr_of_tranzactions[j].day) {
+					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 'z') < 0) {
 						tranzaction aux = copie -> arr_of_tranzactions[i];
 						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
 						copie -> arr_of_tranzactions[j] = aux;
@@ -138,6 +138,7 @@ struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tran
 	}		
 	return copie;
 }
+
 
 
 
