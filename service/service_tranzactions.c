@@ -27,11 +27,10 @@ Return values:
 return 0  : stergere reusita
 return -1 : stergere esuata , nu exista tranzactia cu id ul dat
 */
-struct_with_field_tranzactions* delete_tranzaction(struct_with_field_tranzactions *struct_obj, int tranzaction_ID_to_be_deleted) {
-	struct_with_field_tranzactions *result_delete_tranzaction = delete_tranzaction_repo(struct_obj, tranzaction_ID_to_be_deleted);
-	if (result_delete_tranzaction != NULL)
-		return result_delete_tranzaction;
-	return NULL;
+int delete_tranzaction(struct_with_field_tranzactions *struct_obj, int tranzaction_ID_to_be_deleted) {
+	if(tranzaction_ID_to_be_deleted < 0)
+		return -1;
+	return delete_tranzaction_repo(struct_obj, tranzaction_ID_to_be_deleted);
 }
 
 /*
@@ -64,34 +63,34 @@ struct_with_field_tranzactions *filters_on_tranzactions(struct_with_field_tranza
 	struct_with_field_tranzactions* filtered_struct_obj = create_list_of_tranzactions();
 	if (sum_filter == -1) {
 		for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
-			if(strcmp(struct_obj->arr_of_tranzactions[i].type, type_filter) == 0)
-				add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+			if(strcmp(struct_obj->arr_of_tranzactions[i]->type, type_filter) == 0)
+				add_tranzaction_repo(filtered_struct_obj, struct_obj->arr_of_tranzactions[i]);
 	}
 	else if(strlen(type_filter) == 0) {
 		if (mod_h_or_l == 'H' && sum_filter != -1) {
 			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
-				if (struct_obj->arr_of_tranzactions[i].sum >= sum_filter) {
-					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				if (struct_obj->arr_of_tranzactions[i]->sum >= sum_filter) {
+					add_tranzaction_repo(filtered_struct_obj, struct_obj->arr_of_tranzactions[i]);
 				}
 		}
 		else if (mod_h_or_l == 'L' && sum_filter != -1) {
 			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
-				if (struct_obj->arr_of_tranzactions[i].sum <= sum_filter) {
-					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				if (struct_obj->arr_of_tranzactions[i]->sum <= sum_filter) {
+					add_tranzaction_repo(filtered_struct_obj, struct_obj->arr_of_tranzactions[i]);
 				}
 		}
 	}
 	else {
 		if (mod_h_or_l == 'H' && sum_filter != -1) {
 			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
-				if (struct_obj->arr_of_tranzactions[i].sum >= sum_filter && strcmp(struct_obj->arr_of_tranzactions[i].type, type_filter) == 0) {
-					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				if (struct_obj->arr_of_tranzactions[i]->sum >= sum_filter && strcmp(struct_obj->arr_of_tranzactions[i]->type, type_filter) == 0) {
+					add_tranzaction_repo(filtered_struct_obj, struct_obj->arr_of_tranzactions[i]);
 				}
 		}
 		else if (mod_h_or_l == 'L' && sum_filter != -1) {
 			for (int i = 0; i < struct_obj->nr_of_tranzactions; ++i)
-				if (struct_obj->arr_of_tranzactions[i].sum <= sum_filter && strcmp(struct_obj->arr_of_tranzactions[i].type, type_filter) == 0) {
-					add_tranzaction_repo(filtered_struct_obj, &(struct_obj->arr_of_tranzactions[i]));
+				if (struct_obj->arr_of_tranzactions[i]->sum <= sum_filter && strcmp(struct_obj->arr_of_tranzactions[i]->type, type_filter) == 0) {
+					add_tranzaction_repo(filtered_struct_obj, struct_obj->arr_of_tranzactions[i]);
 				}
 		}
 	}
@@ -104,17 +103,17 @@ struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tran
 		for (int i = 0; i < copie -> nr_of_tranzactions - 1; ++i)
 			for (int j = i + 1; j < copie -> nr_of_tranzactions; ++j)
 				if (strcmp(suma_or_zi, "suma\n") == 0) {
-					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 's') > 0) {
-						tranzaction aux = copie -> arr_of_tranzactions[i];
-						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
-						copie -> arr_of_tranzactions[j] = aux;
+					if (cmp(copie -> arr_of_tranzactions[i], copie->arr_of_tranzactions[j], 's') > 0) {
+						tranzaction aux = *copie -> arr_of_tranzactions[i];
+						*copie -> arr_of_tranzactions[i] = *copie -> arr_of_tranzactions[j];
+						*copie -> arr_of_tranzactions[j] = aux;
 					}
 				}
 				else if (strcmp(suma_or_zi, "zi\n") == 0) {
-					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 'z') > 0) {
-						tranzaction aux = copie -> arr_of_tranzactions[i];
-						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
-						copie -> arr_of_tranzactions[j] = aux;
+					if (cmp(copie -> arr_of_tranzactions[i], copie->arr_of_tranzactions[j], 'z') > 0) {
+						tranzaction aux = *copie -> arr_of_tranzactions[i];
+						*copie -> arr_of_tranzactions[i] = *copie -> arr_of_tranzactions[j];
+						*copie -> arr_of_tranzactions[j] = aux;
 					}
 				}
 	}
@@ -122,17 +121,17 @@ struct_with_field_tranzactions *sorting_based_of_criteria(struct_with_field_tran
 		for (int i = 0; i < copie -> nr_of_tranzactions - 1; ++i)
 			for (int j = i + 1; j < copie -> nr_of_tranzactions; ++j)
 				if (strcmp(suma_or_zi, "suma\n") == 0) {
-					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 's') < 0) {
-						tranzaction aux = copie -> arr_of_tranzactions[i];
-						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
-						copie -> arr_of_tranzactions[j] = aux;
+					if (cmp(copie -> arr_of_tranzactions[i], copie->arr_of_tranzactions[j], 's') < 0) {
+						tranzaction aux = *copie -> arr_of_tranzactions[i];
+						*copie -> arr_of_tranzactions[i] = *copie -> arr_of_tranzactions[j];
+						*copie -> arr_of_tranzactions[j] = aux;
 					}
 				}
 				else if (strcmp(suma_or_zi, "zi\n") == 0) {
-					if (cmp(&copie -> arr_of_tranzactions[i], &copie->arr_of_tranzactions[j], 'z') < 0) {
-						tranzaction aux = copie -> arr_of_tranzactions[i];
-						copie -> arr_of_tranzactions[i] = copie -> arr_of_tranzactions[j];
-						copie -> arr_of_tranzactions[j] = aux;
+					if (cmp(copie -> arr_of_tranzactions[i], copie->arr_of_tranzactions[j], 'z') < 0) {
+						tranzaction aux = *copie -> arr_of_tranzactions[i];
+						*copie -> arr_of_tranzactions[i] = *copie -> arr_of_tranzactions[j];
+						*copie -> arr_of_tranzactions[j] = aux;
 					}
 				}
 	}		

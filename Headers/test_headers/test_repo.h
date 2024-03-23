@@ -6,3 +6,4 @@ void test_add_tranzaction_repo();
 void test_delete_tranzaction_repo();
 void test_modify_tranzaction_repo();
 void test_get_next_tranzaction_id();
+void test_resize();

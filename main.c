@@ -109,9 +109,9 @@ int add(struct_with_field_tranzactions* struct_obj) {
 }
 void afisare_tranzactii(struct_with_field_tranzactions* struct_obj) {
 	for (int i = 0; i < struct_obj-> nr_of_tranzactions; ++i) {
-		printf("tranzactia: %d\nid: %d\nday: %d\nsum: %d\n", i, struct_obj-> arr_of_tranzactions[i].id_tranzaction, struct_obj-> arr_of_tranzactions[i].day, struct_obj-> arr_of_tranzactions[i].sum);
-		puts(struct_obj-> arr_of_tranzactions[i].type);
-		puts(struct_obj-> arr_of_tranzactions[i].description);
+		printf("tranzactia: %d\nid: %d\nday: %d\nsum: %d\n", i, struct_obj -> arr_of_tranzactions[i] -> id_tranzaction, struct_obj -> arr_of_tranzactions[i] -> day, struct_obj-> arr_of_tranzactions[i] -> sum);
+		puts(struct_obj-> arr_of_tranzactions[i] -> type);
+		puts(struct_obj-> arr_of_tranzactions[i] -> description);
 		printf("\n\n");
 	}
 }
@@ -155,7 +155,7 @@ int modify(struct_with_field_tranzactions* struct_obj) {
 	return 0;
 }
 
-struct_with_field_tranzactions* delete(struct_with_field_tranzactions* struct_obj) {
+int delete(struct_with_field_tranzactions* struct_obj) {
 	afisare_tranzactii(struct_obj);
 	int id = -1;
 	printf("Alege un id pentru a sterge tranzactia respectiva : ");
@@ -165,7 +165,7 @@ struct_with_field_tranzactions* delete(struct_with_field_tranzactions* struct_ob
 	}
 	if (getchar() == EOF)
 		exit(EXIT_FAILURE);
-	struct_with_field_tranzactions* rezultat = delete_tranzaction(struct_obj, id);
+	int rezultat = delete_tranzaction(struct_obj, id);
 	return rezultat;
 }
 
@@ -296,16 +296,12 @@ void run() {
 			else
 				printf("OKKK\n\n");
 			break;
-		case 3: {
-			struct_with_field_tranzactions* rezultat = delete(struct_obj);
-			if (rezultat == NULL)
+		case 3: 
+			if (delete(struct_obj) != 0)
 				printf("Ceva a pical la stergere\n\n");
-			else {
-				struct_obj = rezultat;
+			else 
 				printf("OKKK\n\n");
-			}
 			break;
-		}
 		case 4:
 			if (filter(struct_obj) != 0)
 				printf("Ceva a pical la filtrare\n\n");
@@ -329,11 +325,3 @@ int main() {
 	_CrtDumpMemoryLeaks();
 	return 0;
 }
-/*
-int *a[10];
-int **a;
-
-Tranzaction **arr_of_tranzactions;
-
-*/
-// ana are mere

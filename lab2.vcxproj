@@ -127,7 +127,7 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\SEM 2 AN 1\OOP\lab2---OOP\Headers</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\INFO 2\SEM 2\OOP\lab2---OOP\Headers</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>

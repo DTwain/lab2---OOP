@@ -25,11 +25,11 @@ void test_copie_struct_obj() {
 	struct_with_field_tranzactions *copie = copie_struct_obj(struct_obj);
 	assert(copie -> nr_of_tranzactions == 1);
 	assert(copie -> nr_of_tranzactions_added_from_start == 1);
-	assert(copie -> arr_of_tranzactions[0].id_tranzaction == 0);
-	assert(copie -> arr_of_tranzactions[0].sum == 400);
-	assert(copie -> arr_of_tranzactions[0].day == 12);
-	assert(strcmp(copie -> arr_of_tranzactions[0].type, "iesire\n") == 0);
-	assert(strcmp(copie -> arr_of_tranzactions[0].description, "datoria pe aprilie\n") == 0);
+	assert(copie -> arr_of_tranzactions[0] -> id_tranzaction == 0);
+	assert(copie -> arr_of_tranzactions[0] -> sum == 400);
+	assert(copie -> arr_of_tranzactions[0] ->day == 12);
+	assert(strcmp(copie -> arr_of_tranzactions[0] -> type, "iesire\n") == 0);
+	assert(strcmp(copie -> arr_of_tranzactions[0] -> description, "datoria pe aprilie\n") == 0);
 
 	destroy_struct_with_field_tranzactions(copie);
 	destroy_tranzaction(temp);
@@ -43,11 +43,11 @@ void test_add_tranzaction_repo() {
 	assert(add_tranzaction_repo(struct_obj, temp) == 0);
 	assert(struct_obj -> nr_of_tranzactions == 1);
 	assert(struct_obj -> nr_of_tranzactions_added_from_start == 1);
-	assert(struct_obj -> arr_of_tranzactions[0].id_tranzaction == 0);
-	assert(struct_obj -> arr_of_tranzactions[0].sum == 400);
-	assert(struct_obj -> arr_of_tranzactions[0].day == 12);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].type, "iesire\n") == 0);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].description, "datoria pe aprilie\n") == 0);
+	assert(struct_obj -> arr_of_tranzactions[0] -> id_tranzaction == 0);
+	assert(struct_obj -> arr_of_tranzactions[0] -> sum == 400);
+	assert(struct_obj -> arr_of_tranzactions[0] -> day == 12);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0] -> type, "iesire\n") == 0);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0] -> description, "datoria pe aprilie\n") == 0);
 
 	tranzaction *temp2 = create_tranzaction(1, 12, 400, "iesire\n", "datoria pe aprilie\n");
 	assert(validate_tranzaction(temp2) == 0);
@@ -73,20 +73,19 @@ void test_delete_tranzaction_repo() {
 	assert(struct_obj -> nr_of_tranzactions_added_from_start == 2);
 
 
-	struct_with_field_tranzactions* rezultat = delete_tranzaction_repo(struct_obj, temp->id_tranzaction);
-	assert(rezultat != NULL);
-	struct_obj = rezultat;
+	int rezultat = delete_tranzaction_repo(struct_obj, temp->id_tranzaction);
+	assert(rezultat == 0);
 
 	assert(struct_obj -> nr_of_tranzactions == 1);
 	assert(struct_obj -> nr_of_tranzactions_added_from_start == 2);
 
-	assert(delete_tranzaction_repo(struct_obj, temp -> id_tranzaction) == NULL);
+	assert(delete_tranzaction_repo(struct_obj, temp -> id_tranzaction) != 0);
 
-	assert(struct_obj -> arr_of_tranzactions[0].id_tranzaction == 1);
-	assert(struct_obj -> arr_of_tranzactions[0].sum == 300);
-	assert(struct_obj -> arr_of_tranzactions[0].day == 22);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].type, "intrare\n") == 0);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].description, "datoria pe iunie\n") == 0);
+	assert(struct_obj -> arr_of_tranzactions[0] -> id_tranzaction == 1);
+	assert(struct_obj -> arr_of_tranzactions[0] -> sum == 300);
+	assert(struct_obj -> arr_of_tranzactions[0] -> day == 22);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0] -> type, "intrare\n") == 0);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0] -> description, "datoria pe iunie\n") == 0);
 
 	destroy_tranzaction(temp);
 	destroy_tranzaction(temp2);
@@ -152,7 +151,7 @@ void test_resize() {
 	tranzaction* temp17 = create_tranzaction(17, 12, 400, "iesire\n", "datoria pe aprilie\n");
 	tranzaction* temp18 = create_tranzaction(18, 12, 400, "iesire\n", "datoria pe aprilie\n");
 	tranzaction* temp19 = create_tranzaction(19, 12, 400, "iesire\n", "datoria pe aprilie\n");
-	tranzaction* temp20 = create_tranzaction(20, 12, 400, "iesire\n", "datoria pe aprilie\n");
+	tranzaction* temp20 = create_tranzaction(20, 17, 900, "iesire\n", "datoria pe mai\n");
 
 	add_tranzaction_repo(struct_obj, temp);
 	add_tranzaction_repo(struct_obj, temp1);
@@ -177,6 +176,13 @@ void test_resize() {
 	add_tranzaction_repo(struct_obj, temp20);
 
 	assert(struct_obj -> capacity == 40);
+	assert(struct_obj -> nr_of_tranzactions == 21);
+	assert(struct_obj -> nr_of_tranzactions_added_from_start == 21);
+
+	assert(struct_obj->arr_of_tranzactions[20]->day == 17);
+	assert(struct_obj->arr_of_tranzactions[20]->sum == 900);
+	assert(strcmp(struct_obj->arr_of_tranzactions[20]->type, "iesire\n") == 0);
+	assert(strcmp(struct_obj->arr_of_tranzactions[20]->description, "datoria pe mai\n") == 0);
 
 	destroy_tranzaction(temp);
 	destroy_tranzaction(temp1);
@@ -199,6 +205,7 @@ void test_resize() {
 	destroy_tranzaction(temp18);
 	destroy_tranzaction(temp19);
 	destroy_tranzaction(temp20);
+
 	destroy_struct_with_field_tranzactions(struct_obj);
 }
 

@@ -18,17 +18,16 @@ void test_delete_tranzaction_serv() {
 	assert(add_tranzaction(struct_obj, 12, 40, "iesire\n", "cumparaturi\n") == 0);
 	assert(add_tranzaction(struct_obj, 5, 500, "intrare\n", "imprumut\n") == 0);
 
-	struct_with_field_tranzactions* rezultat = delete_tranzaction(struct_obj, 0);
-	assert(rezultat != NULL);
-	struct_obj = rezultat;
+	int rezultat = delete_tranzaction(struct_obj, 0);
+	assert(rezultat == 0);
 
-	assert(delete_tranzaction(struct_obj, 0) == NULL);
+	assert(delete_tranzaction(struct_obj, 0) != 0);
 
-	assert(struct_obj -> arr_of_tranzactions[0].id_tranzaction == 1);
-	assert(struct_obj -> arr_of_tranzactions[0].day == 5);
-	assert(struct_obj -> arr_of_tranzactions[0].sum == 500);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].type, "intrare\n") == 0);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].description, "imprumut\n") == 0);
+	assert(struct_obj -> arr_of_tranzactions[0]->id_tranzaction == 1);
+	assert(struct_obj -> arr_of_tranzactions[0]->day == 5);
+	assert(struct_obj -> arr_of_tranzactions[0]->sum == 500);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0]->type, "intrare\n") == 0);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0]->description, "imprumut\n") == 0);
 
 	assert(struct_obj -> nr_of_tranzactions == 1);
 	assert(struct_obj -> nr_of_tranzactions_added_from_start == 2);
@@ -42,11 +41,11 @@ void test_modify_tranzaction_serv() {
 	assert(add_tranzaction(struct_obj, 5, 500, "intrare\n", "imprumut\n") == 0);
 
 	assert(modify_tranzaction(struct_obj, 0, 9, 100, "intrare\n", "cumparaturi + altele\n") == 0);
-	assert(struct_obj -> arr_of_tranzactions[0].id_tranzaction == 0);
-	assert(struct_obj -> arr_of_tranzactions[0].day == 9);
-	assert(struct_obj -> arr_of_tranzactions[0].sum == 100);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].type, "intrare\n") == 0);
-	assert(strcmp(struct_obj -> arr_of_tranzactions[0].description, "cumparaturi + altele\n") == 0);
+	assert(struct_obj -> arr_of_tranzactions[0]->id_tranzaction == 0);
+	assert(struct_obj -> arr_of_tranzactions[0]->day == 9);
+	assert(struct_obj -> arr_of_tranzactions[0]->sum == 100);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0]->type, "intrare\n") == 0);
+	assert(strcmp(struct_obj -> arr_of_tranzactions[0]->description, "cumparaturi + altele\n") == 0);
 
 	assert(modify_tranzaction(struct_obj, 0, 9, 100, "intrare\n", "\0") == -1);
 	assert(modify_tranzaction(struct_obj, 4, 17, 1500, "iesire\n", "cumparaturi + altele\n") == -1);
@@ -63,17 +62,17 @@ void test_lista_de_tranzactii_serv() {
 	assert(copie -> nr_of_tranzactions == 2);
 	assert(copie -> nr_of_tranzactions_added_from_start == 2);
 
-	assert(copie -> arr_of_tranzactions[0].id_tranzaction == 0);
-	assert(copie -> arr_of_tranzactions[0].day == 12);
-	assert(copie ->arr_of_tranzactions[0].sum == 40);
-	assert(strcmp(copie -> arr_of_tranzactions[0].type, "iesire\n") == 0);
-	assert(strcmp(copie -> arr_of_tranzactions[0].description, "cumparaturi\n") == 0);
+	assert(copie -> arr_of_tranzactions[0]->id_tranzaction == 0);
+	assert(copie -> arr_of_tranzactions[0]->day == 12);
+	assert(copie ->arr_of_tranzactions[0]->sum == 40);
+	assert(strcmp(copie -> arr_of_tranzactions[0]->type, "iesire\n") == 0);
+	assert(strcmp(copie -> arr_of_tranzactions[0]->description, "cumparaturi\n") == 0);
 
-	assert(copie -> arr_of_tranzactions[1].id_tranzaction == 1);
-	assert(copie -> arr_of_tranzactions[1].day == 5);
-	assert(copie -> arr_of_tranzactions[1].sum == 500);
-	assert(strcmp(copie -> arr_of_tranzactions[1].type, "intrare\n") == 0);
-	assert(strcmp(copie -> arr_of_tranzactions[1].description, "imprumut\n") == 0);
+	assert(copie -> arr_of_tranzactions[1]->id_tranzaction == 1);
+	assert(copie -> arr_of_tranzactions[1]->day == 5);
+	assert(copie -> arr_of_tranzactions[1]->sum == 500);
+	assert(strcmp(copie -> arr_of_tranzactions[1]->type, "intrare\n") == 0);
+	assert(strcmp(copie -> arr_of_tranzactions[1]->description, "imprumut\n") == 0);
 
 	destroy_struct_with_field_tranzactions(copie);
 	destroy_struct_with_field_tranzactions(struct_obj);
@@ -96,34 +95,34 @@ void test_filters_on_tranzactions_serv() {
 
 	
 	assert(copie2 -> nr_of_tranzactions == 3);
-	assert(copie2 -> arr_of_tranzactions[0].day == 5);
-	assert(copie2 -> arr_of_tranzactions[0].sum == 500);
-	assert(strcmp(copie2 -> arr_of_tranzactions[0].type, "intrare\n") == 0);
-	assert(strcmp(copie2 -> arr_of_tranzactions[0].description, "imprumut\n") == 0);
+	assert(copie2 -> arr_of_tranzactions[0]->day == 5);
+	assert(copie2 -> arr_of_tranzactions[0]->sum == 500);
+	assert(strcmp(copie2 -> arr_of_tranzactions[0]->type, "intrare\n") == 0);
+	assert(strcmp(copie2 -> arr_of_tranzactions[0]->description, "imprumut\n") == 0);
 
-	assert(copie2 -> arr_of_tranzactions[1].day == 19);
-	assert(copie2 -> arr_of_tranzactions[1].sum == 1000);
-	assert(strcmp(copie2 -> arr_of_tranzactions[1].type, "intrare\n") == 0);
-	assert(strcmp(copie2 -> arr_of_tranzactions[1].description, "club\n") == 0);
+	assert(copie2 -> arr_of_tranzactions[1]->day == 19);
+	assert(copie2 -> arr_of_tranzactions[1]->sum == 1000);
+	assert(strcmp(copie2 -> arr_of_tranzactions[1]->type, "intrare\n") == 0);
+	assert(strcmp(copie2 -> arr_of_tranzactions[1]->description, "club\n") == 0);
 
 	assert(copie3 -> nr_of_tranzactions == 2);
-	assert(copie3 -> arr_of_tranzactions[0].day == 12);
-	assert(copie3 -> arr_of_tranzactions[0].sum == 40);
-	assert(strcmp(copie3 -> arr_of_tranzactions[0].type, "iesire\n") == 0);
-	assert(strcmp(copie3 -> arr_of_tranzactions[0].description, "cumparaturi\n") == 0);
+	assert(copie3 -> arr_of_tranzactions[0]->day == 12);
+	assert(copie3 -> arr_of_tranzactions[0]->sum == 40);
+	assert(strcmp(copie3 -> arr_of_tranzactions[0]->type, "iesire\n") == 0);
+	assert(strcmp(copie3 -> arr_of_tranzactions[0]->description, "cumparaturi\n") == 0);
 
 	assert(copie4 -> nr_of_tranzactions == 0);
 
 	assert(copie5->nr_of_tranzactions == 2);
-	assert(copie5->arr_of_tranzactions[0].day == 12);
-	assert(copie5->arr_of_tranzactions[0].sum == 40);
-	assert(strcmp(copie5->arr_of_tranzactions[0].type, "iesire\n") == 0);
-	assert(strcmp(copie5->arr_of_tranzactions[0].description, "cumparaturi\n") == 0);
+	assert(copie5->arr_of_tranzactions[0]->day == 12);
+	assert(copie5->arr_of_tranzactions[0]->sum == 40);
+	assert(strcmp(copie5->arr_of_tranzactions[0]->type, "iesire\n") == 0);
+	assert(strcmp(copie5->arr_of_tranzactions[0]->description, "cumparaturi\n") == 0);
 
-	assert(copie5->arr_of_tranzactions[1].day == 8);
-	assert(copie5->arr_of_tranzactions[1].sum == 300);
-	assert(strcmp(copie5->arr_of_tranzactions[1].type, "iesire\n") == 0);
-	assert(strcmp(copie5->arr_of_tranzactions[1].description, "plata ceva\n") == 0);
+	assert(copie5->arr_of_tranzactions[1]->day == 8);
+	assert(copie5->arr_of_tranzactions[1]->sum == 300);
+	assert(strcmp(copie5->arr_of_tranzactions[1]->type, "iesire\n") == 0);
+	assert(strcmp(copie5->arr_of_tranzactions[1]->description, "plata ceva\n") == 0);
 
 	assert(copie6->nr_of_tranzactions == 3);
 	
@@ -152,29 +151,29 @@ void test_sorting_based_of_criteria() {
 	struct_with_field_tranzactions *rezultat3 = sorting_based_of_criteria(struct_obj, 'D', "suma\n", comparare);
 	struct_with_field_tranzactions *rezultat4 = sorting_based_of_criteria(struct_obj, 'D', "zi\n", comparare);
 	
-	assert(rezultat -> arr_of_tranzactions[0].id_tranzaction == 4);
-	assert(rezultat -> arr_of_tranzactions[1].id_tranzaction == 1);
-	assert(rezultat -> arr_of_tranzactions[2].id_tranzaction == 3);
-	assert(rezultat -> arr_of_tranzactions[3].id_tranzaction == 0);
-	assert(rezultat -> arr_of_tranzactions[4].id_tranzaction == 2);
+	assert(rezultat -> arr_of_tranzactions[0]->id_tranzaction == 4);
+	assert(rezultat -> arr_of_tranzactions[1]->id_tranzaction == 1);
+	assert(rezultat -> arr_of_tranzactions[2]->id_tranzaction == 3);
+	assert(rezultat -> arr_of_tranzactions[3]->id_tranzaction == 0);
+	assert(rezultat -> arr_of_tranzactions[4]->id_tranzaction == 2);
 
-	assert(rezultat2 -> arr_of_tranzactions[0].id_tranzaction == 1);
-	assert(rezultat2 -> arr_of_tranzactions[1].id_tranzaction == 3);
-	assert(rezultat2 -> arr_of_tranzactions[2].id_tranzaction == 0);
-	assert(rezultat2 -> arr_of_tranzactions[3].id_tranzaction == 4);
-	assert(rezultat2 -> arr_of_tranzactions[4].id_tranzaction == 2);
+	assert(rezultat2 -> arr_of_tranzactions[0]->id_tranzaction == 1);
+	assert(rezultat2 -> arr_of_tranzactions[1]->id_tranzaction == 3);
+	assert(rezultat2 -> arr_of_tranzactions[2]->id_tranzaction == 0);
+	assert(rezultat2 -> arr_of_tranzactions[3]->id_tranzaction == 4);
+	assert(rezultat2 -> arr_of_tranzactions[4]->id_tranzaction == 2);
 
-	assert(rezultat3 -> arr_of_tranzactions[0].id_tranzaction == 2);
-	assert(rezultat3 -> arr_of_tranzactions[1].id_tranzaction == 0);
-	assert(rezultat3 -> arr_of_tranzactions[2].id_tranzaction == 3);
-	assert(rezultat3 -> arr_of_tranzactions[3].id_tranzaction == 1);
-	assert(rezultat3 -> arr_of_tranzactions[4].id_tranzaction == 4);
+	assert(rezultat3 -> arr_of_tranzactions[0]->id_tranzaction == 2);
+	assert(rezultat3 -> arr_of_tranzactions[1]->id_tranzaction == 0);
+	assert(rezultat3 -> arr_of_tranzactions[2]->id_tranzaction == 3);
+	assert(rezultat3 -> arr_of_tranzactions[3]->id_tranzaction == 1);
+	assert(rezultat3 -> arr_of_tranzactions[4]->id_tranzaction == 4);
 
-	assert(rezultat4 -> arr_of_tranzactions[0].id_tranzaction == 2);
-	assert(rezultat4 -> arr_of_tranzactions[1].id_tranzaction == 4);
-	assert(rezultat4 -> arr_of_tranzactions[2].id_tranzaction == 0);
-	assert(rezultat4 -> arr_of_tranzactions[3].id_tranzaction == 3);
-	assert(rezultat4 -> arr_of_tranzactions[4].id_tranzaction == 1);
+	assert(rezultat4 -> arr_of_tranzactions[0]->id_tranzaction == 2);
+	assert(rezultat4 -> arr_of_tranzactions[1]->id_tranzaction == 4);
+	assert(rezultat4 -> arr_of_tranzactions[2]->id_tranzaction == 0);
+	assert(rezultat4 -> arr_of_tranzactions[3]->id_tranzaction == 3);
+	assert(rezultat4 -> arr_of_tranzactions[4]->id_tranzaction == 1);
 
 
 	destroy_struct_with_field_tranzactions(struct_obj);
